@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+
+  <li><a href="{% url 'blog:upload' %}">Основная</a></li>
+  <li>{{ obj.data.name | cut:'json_data/' }}</li>
+
+{% endblock %}
+
+
+{% block content %}
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <td>№</td>
+        <td>Пользователь</td>
+        <td>Доступные объекты</td>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for usr in object_list %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ usr.first_name }} {{ usr.last_name }}</td>
+        <td>
+            {% for obj_dates in usr.json_dates.all %}
+                <p><a href="{% url 'blog:upload-detail' obj_dates.pk %}">{{ obj_dates.data.name | cut:'json_data/'}}</a></p>
+            {% endfor %}
+        </td>
+    </tr>
+
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

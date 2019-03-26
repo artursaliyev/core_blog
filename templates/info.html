@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {% endblock %}
+
+{% block css %}
+<link href="{% static 'css/mkhplayer.css'  %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+{#    <a href="/media/{{ object.data }}"></a>#}
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+
+            <nav class="navbar navbar-expand-lg navbar-light" style="background: #1a2b43">
+                <button class="btn" id="menu-toggle" style="background: #1a2b45; color: white;padding: 3px 7px"><span class="glyphicon glyphicon-align-justify" style="font-size:20px; padding: 0px"></span></button>
+
+                <div id="number" align="center">{% block title_menu %} Test 11 ( +998994563456 ) {% endblock %}</div>
+
+            </nav>
+
+            <div class="container-fluid">
+                <div id="jadval">
+
+                    <div class="row">
+                    {% for wave in object.waves.all %}
+                        <div class="col-lg-4">
+                            <div class="portlet">
+                                <div class="portlet-heading backgound-primary">
+                                    <h3 class="portlet-title">
+                                        <i class="glyphicon glyphicon-arrow-up"></i> {% block phone_to %}+998998987684 {% endblock %}
+                                    </h3>
+                                    <div class="portlet-widgets">
+                                        <a data-toggle="collapse"  href="#bg-number1" ><i class="glyphicon glyphicon-minus"></i></a>
+                                        <span class="divider"></span>
+                                        <a href="#" data-toggle="remove"><i class="glyphicon glyphicon-remove"></i></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div id="bg-number1" class="panel-collapse collapse show">
+                                    <div class="portlet-body">
+
+                                        <audio id="music0" preload="metadata">
+                                            <source src="{{ wave.data.url }}">
+                                        </audio>
+
+                                        <table class="table table-hover table-bordered">
+                                            <tr >
+                                                <td class="active">Тип</td>
+                                                <td>Исходящий</td>
+                                            </tr>
+                                            <tr >
+                                                <td class="active">Время начала</td>
+                                                <td>20.02.2019 г. 12: 30</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="active">Время окончания</td>
+                                                <td>20.02.2019 г. 12:40</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="active">Длительность</td>
+                                                <td>10 сек.</td>
+                                            </tr>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                    </div> <!-- End row -->
+
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+{% endblock %}
+

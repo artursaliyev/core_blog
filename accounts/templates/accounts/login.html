@@ -1,0 +1,36 @@
+
+{% extends 'accounts/base_accounts.html'%}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block title %} Авторизация {% endblock %}
+
+
+{% block content%}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+        <div class="panel panel-default" id="logform">
+
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-lock"></span> Авторизация
+            </div>
+
+            <div class="panel-body">
+
+                <form action="{% url 'accounts:login_view' %}" method="POST" novalidate>
+                    <div class="form-group">
+                        {% csrf_token %}
+
+                        {% bootstrap_form form %}
+
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Вход</button>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+  {% endblock%}

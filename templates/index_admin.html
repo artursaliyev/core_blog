@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<title>{% block title %} {% endblock %}</title>
+
+
+{% block content %}
+<div class="container" style="padding-top: 30px;">
+    {# 1. BUTTON TO TRIGGER THE ACTION #}
+    <button type="button" class="btn btn-success js-upload-photos btn-lg" style="margin-bottom: 20px;">
+      <span class="glyphicon glyphicon-cloud-upload"></span> Загрузка файлов
+    </button>
+
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-danger btn-lg pull-right" data-toggle="modal" data-target="#myModal">
+     <span class="glyphicon glyphicon-trash"></span>  Очистить файлов
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Удаление файлов</h4>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <a href="{% url 'blog:clear_database' %}" type="button" class="btn btn-danger">Удалить</a>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    {# 2. FILE INPUT TO BE USED BY THE PLUG-IN #}
+    <input id="fileupload" type="file" name="data" multiple
+           style="display: none;"
+           data-url="{% url 'blog:upload' %}"
+           data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+
+    {# 3. TABLE TO DISPLAY THE UPLOADED PHOTOS #}
+    <table id="gallery" class="table table-hover table-bordered" style="font-size: large">
+      <thead>
+        <tr>
+          <th>Объекты</th>
+          <th>Доступна для</th>
+          <th>Дата создания</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for obj in object_list %}
+        {% if '.json' in obj.data.name %}
+          <tr style='background: #c4dce8'>
+            <td><a href="{% url 'blog:upload-detail' obj.pk %}">{{ obj.data.name | cut:'json_data/'}}
+            </a></td>
+            <td>
+            {% if obj.perm_users.all %}
+                {% for usr in obj.perm_users.all %}
+                   <span style="font-size: small"> {{ usr.first_name }} {{ usr.last_name }}, </span>
+                {% endfor %}
+            {% else %}
+                (нет доступа)
+            {% endif %}
+            </td>
+            <td>{{ obj.created | date:'d/m/Y, H:i:s'}}</td>
+          </tr>
+        {% else %}
+            <tr>
+            <td>{{ obj.data.name | cut:'json_data/'}}</td>
+            <td>спомогатеьный файл</td>
+            <td>{{ obj.created | date:'d/m/Y, H:i:s'}}</td>
+          </tr>
+        {% endif %}
+
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
+
+
+<div class="modal fade" id="modal-progress" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Загрузка файлов, ждите...</h4>
+      </div>
+      <div class="modal-body">
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+{% block javascript %}
+  {# JQUERY FILE UPLOAD SCRIPTS #}
+  <script src="{% static 'js/upload/jquery.ui.widget.js' %}"></script>
+  <script src="{% static 'js/upload/jquery.iframe-transport.js' %}"></script>
+  <script src="{% static 'js/upload/jquery.fileupload.js' %}"></script>
+
+  {# PHOTOS PAGE SCRIPTS #}
+  <script src="{% static '/js/upload/basic-upload.js' %}"></script>
+
+    <script>
+    function  delete_func() {
+        var a=confirm('Дейсвительно хотите удалить файлы?');
+        if(a) {
+            console.log("ha");
+        }
+        else {
+            console.log("yoq    ");
+        }
+
+    }
+    </script>
+{% endblock %}

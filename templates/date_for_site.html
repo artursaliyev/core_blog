@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script>
+  var data = "{{ data | escapejs}}";
+    console.log(data);
+    console.log(data.length);
+  localStorage.setItem("k_data", data);
+  if(localStorage.getItem("k_data"))
+  {
+      alert("information loaded\n");
+  }
+</script>
+</body>
+</html>

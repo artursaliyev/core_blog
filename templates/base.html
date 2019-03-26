@@ -1,0 +1,73 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>{% block title %} {% endblock %}</title>
+
+    {% block css %}
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
+    <link href="{% static 'css/icons.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+    {% endblock %}
+    {% block extend_css %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+    {% block navbar %}
+     <ol class="breadcrumb" style="font-size: large">
+      <li>Основная</li>
+      <li><a href="{% url 'blog:user_list' %}">Пользователи</a></li>
+      <li><a href="{% url 'accounts:logout_view' %}">Выйти из системы</a></li>
+    </ol>
+    {% endblock %}
+
+    <div id="wrapper">
+
+        {% block side_bar %}
+
+        {% endblock %}
+
+        {% block content %}
+
+        {% endblock %}
+
+        </div>
+    <!-- /#wrapper -->
+
+    <!-- Bootstrap core JavaScript -->
+    {% block js_script %}
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <!-- Custom main Js -->
+    <script src="{% static 'js/switchery.min.js' %}"></script>
+    <script src="{% static 'js/jquery.core.js' %}"></script>
+
+    <!-- Js for info page -->
+    <script src="{% static 'js/jquery.mkhplayer.js' %}"></script>
+    <!-- Menu Toggle Script -->
+
+
+
+     {% endblock %}
+
+
+    {% block javascript %}
+    {% endblock %}
+
+
+
+
+
+</body>
+
+</html>

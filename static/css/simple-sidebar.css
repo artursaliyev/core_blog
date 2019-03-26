@@ -1,0 +1,178 @@
+body {
+  overflow-x: hidden;
+}
+
+#menu-toggle{
+    margin: 6px;
+    float: left;
+}
+#wrapper .navbar #number{
+  font-size: 18px;
+  color: white;
+  padding: 10px 15px;
+    text-align: center;
+    float: left;
+}
+
+#sidebar-wrapper {
+  min-height: 100vh;
+  margin-left: -15rem;
+  -webkit-transition: margin .25s ease-out;
+  -moz-transition: margin .25s ease-out;
+  -o-transition: margin .25s ease-out;
+  transition: margin .25s ease-out;
+  z-index: 100;
+}
+
+#sidebar-wrapper .sidebar-heading {
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+  width: 15rem;
+}
+
+#page-content-wrapper {
+  min-width: 100vw;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+  margin-left: 0;
+  z-index: 100;
+}
+
+@media (min-width: 768px) {
+  #sidebar-wrapper {
+    margin-left: 0;
+      z-index: 100;
+  }
+
+  #page-content-wrapper {
+    min-width: 0;
+    width: 100%;
+  }
+
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: -15rem;
+      z-index: 100;
+  }
+}
+
+
+
+.backgound-primary {
+  background: #1a2b44;
+}
+
+.portlet-body table{
+  margin: 10px 0px 0 0;
+}
+
+.portlet-body table tr td{
+  padding: 3px;
+}
+
+.table tr td {
+font-size: 13px;
+}
+
+/*for chrome*/
+@media screen and (-webkit-min-device-pixel-ratio:0){
+
+    #jadval{
+    margin-top: 90px;
+}
+
+#forAudio{
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    background: #0b0c0f;
+    height: 70px;
+    left: 0;
+}
+
+#forAudio audio{
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 10px;
+}
+
+
+}
+/*for mozillla*/
+@-moz-document url-prefix() {
+
+
+#jadval{
+    margin-top: 70px;
+}
+
+#forAudio{
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    background: #0b0c0f;
+    height: 50px;
+    left: 0;
+}
+
+#forAudio audio{
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 10px;
+}
+}
+
+/*for safari*/
+@media not all and (min-resolution:.001dpcm) { @media {
+
+#jadval{
+    margin-top: 70px;
+}
+
+#forAudio{
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    background: #0b0c0f;
+    height: 50px;
+    left: 0;
+}
+
+#forAudio audio{
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 10px;
+}
+
+}}
+
+.buttons {
+   padding: 10px 5px 5px 5px;
+   margin: 10px;
+  }
+
+.buttons .glyphicon
+  {
+      font-size: 16px;
+      color: #000;
+      margin: 10px 0 0 0;
+
+  }
+
+.div{
+        background: #ebf0f0;
+        padding: 1px 5px 10px 5px;
+        margin-bottom: 10px;
+        border-radius: 3px;
+    }
+
+a img{
+    width: 18px;
+      margin-top: 10px;
+}
