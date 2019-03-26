@@ -6,6 +6,6 @@ def max_workers():
     return cpu_count() * 2 + 1
 
 
-bind = "unix:{{ project_folder }}my_sock.sock"
+bind = "unix:{{ remote_project_url }}/my_sock.sock"
 workers = max_workers()
 

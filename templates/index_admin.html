@@ -22,10 +22,10 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">Удаление файлов</h4>
+            <h4 class="modal-title" id="myModalLabel">Информация</h4>
           </div>
           <div class="modal-body">
-            ...
+            <h4>Вы действительно хотите удалить...</h4>
           </div>
           <div class="modal-footer">
             <a href="{% url 'blog:clear_database' %}" type="button" class="btn btn-danger">Удалить</a>
@@ -100,7 +100,6 @@
 
 {% endblock %}
 
-
 {% block javascript %}
   {# JQUERY FILE UPLOAD SCRIPTS #}
   <script src="{% static 'js/upload/jquery.ui.widget.js' %}"></script>
@@ -110,16 +109,4 @@
   {# PHOTOS PAGE SCRIPTS #}
   <script src="{% static '/js/upload/basic-upload.js' %}"></script>
 
-    <script>
-    function  delete_func() {
-        var a=confirm('Дейсвительно хотите удалить файлы?');
-        if(a) {
-            console.log("ha");
-        }
-        else {
-            console.log("yoq    ");
-        }
-
-    }
-    </script>
 {% endblock %}

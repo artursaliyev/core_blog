@@ -9,17 +9,17 @@ env.hosts = ['ssh_user@host']
 
 
 def deploy():
-    """Настройки"""
+    """Deploy project"""
     set_env()
     install_system_libs()
     create_folders()
     get_src()
     create_virtealenv()
     install_venv_libs()
-    # configure_nginx()
-    # configure_gunicorn_and_supervisor()
-    # run_django_postbootstrap_commands()
-    # restsrt_all()
+    configure_nginx()
+    configure_gunicorn_and_supervisor()
+    run_django_commands()
+    restsrt_all()
 
 
 def update():
@@ -30,23 +30,22 @@ def update():
     install_venv_libs()
     configure_nginx()
     configure_gunicorn_and_supervisor()
-    run_django_postbootstrap_commands()
+    run_django_commands()
     restsrt_all()
 
 
 def set_env():
     env.BASE_SRC_PATH = '/home/devops/projects'
-    env.PROJECT_FOLDER = os.path.join(env.BASE_SRC_PATH, 'project_blog')
     env.PROJECT_NAME = 'core'
 
-    # /home/devops/projects/project_blog/core/
-    env.REMOTE_PROJECT_PATH = os.path.join(env.PROJECT_FOLDER, env.PROJECT_NAME)
+    # /home/devops/projects/core/
+    env.REMOTE_PROJECT_PATH = os.path.join(env.BASE_SRC_PATH, env.PROJECT_NAME)
 
-    env.GIT_REPO_PATH = 'https://github.com/artursaliyev/project_blog'
+    env.GIT_REPO_PATH = 'https://github.com/artursaliyev/core_blog.git'
 
-    # /home/devops/projects/project_blog/venv/
+    # /home/devops/projects/core/venv/
     env.REMOTE_VENV_PATH = os.path.join(
-        env.PROJECT_FOLDER,
+        env.REMOTE_PROJECT_PATH,
         'venv',
     )
 
@@ -57,11 +56,10 @@ def set_env():
 
 def _put_template(template_name, remote_path):
     upload_template(
-        os.path.join('../core/deploy_templates', template_name),
+        os.path.join('deploy_templates', template_name),
         remote_path,
         context={
-            'project_name': env.PROJECT_NAME,
-            'project_folder': env.PROJECT_FOLDER,
+            'remote_project_url': env.REMOTE_PROJECT_PATH,
         },
         use_sudo=True,
         use_jinja=True
@@ -72,6 +70,13 @@ def _mkdir(path):
     run('mkdir -p %s' % path)
 
 
+def set_locale():
+    with cd(env.REMOTE_PROJECT_PATH):
+        run('export LC_ALL="en_US.UTF-8"')
+        run('export LC_TYPE="en_US.UTF-8"')
+        sudo('dpkg-reconfigure locales -u')
+
+
 def install_system_libs():
     sudo('apt-get install -y python3.5-dev')
     sudo('apt-get install -y python3-venv')
@@ -80,12 +85,12 @@ def install_system_libs():
 
 
 def create_folders():
-    _mkdir(env.PROJECT_FOLDER)
+    _mkdir(env.REMOTE_PROJECT_PATH)
 
 
 def get_src():
-    with cd(env.PROJECT_FOLDER):
-        if not exists(os.path.join(env.PROJECT_FOLDER, '.git')):
+    with cd(env.REMOTE_PROJECT_PATH):
+        if not exists(os.path.join(env.REMOTE_PROJECT_PATH, '.git')):
             run('git clone %s .' % env.GIT_REPO_PATH)
         else:
             run('git pull %s' % env.GIT_REPO_PATH)
@@ -97,6 +102,10 @@ def create_virtealenv():
 
 
 def install_venv_libs():
+    run('%s -m pip install --upgrade pip' % (
+        env.VENV_REMOTE_PYTHON_PATH
+    ))
+
     run('%s -m pip install -r %s' % (
         env.VENV_REMOTE_PYTHON_PATH,
         os.path.join(env.REMOTE_PROJECT_PATH, 'requirements.txt')
@@ -130,7 +139,7 @@ def configure_gunicorn_and_supervisor():
     )
 
 
-def run_django_postbootstrap_commands():
+def run_django_commands():
 
     run('%s %s migrate' % (
         env.VENV_REMOTE_PYTHON_PATH,
