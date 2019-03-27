@@ -20,10 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'y8lshea$k&-o9d*wy!yipoegcgoc@66t^v8k+esb822z!5h+4#'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'y8lshea$k&-o9d*wy!yipoegcgoc@66t^v8k+esb822z!5h+4#')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
+
 
 ALLOWED_HOSTS = ['*']
 
@@ -85,7 +87,7 @@ DATABASES = {
     }
 }
 
-CONN_MAX_AGE = 100
+CONN_MAX_AGE = 10
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -138,4 +140,53 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_REDIRECT_URL = '/'
+
+DEBUG = False
+
+
+"""Если True, SecurityMiddleware устанавливает заголовок X-Content-Type-Options: nosniff во всех ответах, 
+у которых его еще нет."""
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+
+"""Если True, SecurityMiddlewareустанавливает X-XSS-Protection: 1; mode = заголовок блока для всех ответов, 
+у которых его еще нет."""
+SECURE_BROWSER_XSS_FILTER = True
+
+
+"""Если True, перенаправляет все не-HTTPS-запросы на HTTPS (за исключением тех URL-адресов, которые соответствуют 
+регулярному выражению, указанному в ).SecurityMiddleware SECURE_REDIRECT_EXEMPT"""
+# SECURE_SSL_REDIRECT = True
+
+
+"""Использовать ли безопасный cookie для cookie сеанса. Если для этого параметра установлено значение True«cookie», 
+оно будет помечено как «безопасное», что означает, что браузеры могут гарантировать, что файл cookie отправляется 
+только по HTTPS-соединению.
+Отключение этого параметра не является хорошей идеей, поскольку злоумышленник может перехватить незашифрованный 
+файл cookie сеанса с помощью анализатора пакетов и использовать файл cookie для перехвата сеанса пользователя."""
+# SESSION_COOKIE_SECURE = True
+
+"""Использовать ли безопасный файл cookie для файла CSRF. Если для этого параметра установлено значение True«cookie», 
+оно будет помечено как «безопасное», что означает, что браузеры могут гарантировать, 
+что файл cookie отправляется только с подключением HTTPS."""
+# CSRF_COOKIE_SECURE = True
+
+"""По умолчанию: 'SAMEORIGIN'
+
+Значение по умолчанию для заголовка X-Frame-Options используется XFrameOptionsMiddleware. 
+Смотрите документацию по защите от кликджекинга ."""
+X_FRAME_OPTIONS = 'DENY'
+
+# SECURE_HSTS_SECONDS = 300
+
+
+"""
+После настройки HTTPS включите следующие параметры.
+
+CSRF_COOKIE_SECURE¶
+Установите это, чтобы True избежать случайной передачи файла cookie CSRF через HTTP.
+
+SESSION_COOKIE_SECURE¶
+Установите это, чтобы True избежать случайной передачи cookie сеанса по HTTP.
+"""
 
