@@ -158,6 +158,7 @@ def restsrt_all():
     sudo('supervisorctl reread')
     sudo('supervisorctl update')
     sudo('service nginx reload')
+    sudo('service nginx restart')
 
 
 
