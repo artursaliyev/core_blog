@@ -1,3 +1,9 @@
+"""Author Artur Saliyev
+   version 1.0
+   March 2019 y.
+   Open source
+"""
+
 
 import os
 from fabric.state import env
@@ -25,7 +31,6 @@ def deploy():
 def update():
     """Update project"""
     set_env()
-    create_folders()
     get_src()
     install_venv_libs()
     configure_nginx()
