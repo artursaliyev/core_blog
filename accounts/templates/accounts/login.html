@@ -49,11 +49,11 @@
             $("#secretKey").css("border-bottom","1px solid #bb4942");
             return false;
         }
-
         else
         {
             $("#check").html("");
             $("#secretKey").css("border-bottom","1px solid #cccfd1");
+            localStorage.setItem("k_data", $("#secretKey").val());
             return true;
         }
 
