@@ -1,5 +1,4 @@
 Django==2.1.7
 django-bootstrap3
 django-cleanup
-Fabric3
 gunicorn

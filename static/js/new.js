@@ -2,191 +2,242 @@
 
 $(document).ready(function () {
 
-    var player = $("#player");//audio tegi player
+    var player =  $("#player");//audio tegi player
+    var k_data;
+    var current_music;
+    var temp;
+    $(document).on("touchstart",".music", function () {
 
-    $(document).on("click touchstart",".buttons", function () {
+        current_music = $(this); //tanlangan musiqa (href a)
 
-        var current_music = $(this); //tanlangan musiqa (href a)
+        temp = true;
+        if(current_music.attr("active")==="true") {
 
-        //current_music.attr("active","true");
-
-        player.trigger("pause");
-
-        $(".buttons").children("span").removeClass("glyphicon-pause").addClass("glyphicon-play");
-
-        $(".buttons").children("img").remove();
-
-        if(current_music.attr("src"))
-        {
-            player.attr("src", current_music.attr("src"));
-            player.trigger('play');
+            if(current_music.children('img[class=play_button]').attr('style')==='display:none;') {
+                player.get(0).pause();
+                current_music.children('img[class=play_button]').attr('style', 'display:block;');
+                current_music.children('img[class=pause_button]').attr('style', 'display:none;');
+                current_music.children('img[class=load_button]').attr('style', 'display:none;');
+            }
+            else {
+                player.get(0).play();
+                current_music.children('img[class=pause_button]').attr('style', 'display:block;');
+                current_music.children('img[class=load_button]').attr('style', 'display:none;');
+                current_music.children('img[class=play_button]').attr('style', 'display:none;');
+            }
             return;
         }
 
-            current_music.children("span").removeClass("glyphicon-play");
-            current_music.append('<img src="/static/css/load1.gif">');
-            let xhr = new XMLHttpRequest();
 
-            xhr.open('GET', current_music.attr("file"), true);
-            xhr.responseType = 'arraybuffer';
+        player.removeAttr("src");
+        player.trigger('load');
 
-            xhr.onreadystatechange = function (e) {
-                if (xhr.readyState === 4 && xhr.status === 200) {
+        // if(current_music.attr("src")!=="")
+        // {
+        //     player.get(0).pause();
+        //     player.currentTime = 0;
+        //      $('.music[active=true]').children('img[class=load_button]').attr('style', 'display:none;');
+        //      $('.music[active=true]').children('img[class=pause_button]').attr('style', 'display:none;');
+        //      $('.music[active=true]').children('img[class=play_button]').attr('style', 'display:block;');
+        //      $('.music[active=true]').attr("active", "false");
+        //      current_music.attr("active","true");
+        //      current_music.children('img[class=load_button]').attr('style', 'display:block;');
+        //     current_music.children('img[class=play_button]').attr('style', 'display:none;');
+        //     current_music.children('img[class=pause_button]').attr('style', 'display:none;');
+        //     player.attr("src", current_music.attr("src"));
+        //     player.trigger("load");
+        //     return;
+        // }
 
-                    var view = new Uint8Array(this.response, 0);
-                    var key = strToBuffer(localStorage.getItem("k_data"));
-                    var opentext = encrytpt(view, key);
-                    var rezzz = bufferToBase64(opentext);
+        temp=false;
+        player.get(0).pause();
+        player.currentTime = 0;
 
-                    player.attr("src", "data:audio/x-wav;base64," + rezzz);
-                    current_music.children("img").remove();
-                    current_music.children("span").addClass("glyphicon-pause");
-                    current_music.attr("src", "data:audio/x-wav;base64," + rezzz);
-                    player.trigger('play');
+        current_music.children('img[class=load_button]').attr('style', 'display:block;');
+        current_music.children('img[class=play_button]').attr('style', 'display:none;');
+        current_music.children('img[class=pause_button]').attr('style', 'display:none;');
 
+        $('.music[active=true]').children('img[class=load_button]').attr('style', 'display:none;');
+        $('.music[active=true]').children('img[class=pause_button]').attr('style', 'display:none;');
+        $('.music[active=true]').children('img[class=play_button]').attr('style', 'display:block;');
 
+        $('.music[active=true]').attr("active", "false");
+
+        current_music.attr("active","true");
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', current_music.attr("file"), true);
+        xhr.responseType = 'arraybuffer';
+
+        xhr.onreadystatechange = function (e) {
+            if (xhr.readyState === 4) {
+                if(xhr.status === 200) {
+                    var res_byte = new Uint8Array(this.response, 0);
+                    var key = new TextEncoder("utf-8").encode(k_data);
+                    var aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
+                    var decryptedBytes = aesCbc.decrypt(res_byte);
+                    var myblob = new Blob([decryptedBytes], {type:'audio/mpeg'});
+                    var blobUrl = URL.createObjectURL(myblob);
+                    player.attr('src', blobUrl);
+                    player.trigger("load");
                 }
+                else {
+                    alert("Error load audio file!!!");
+                } }
             };
             xhr.send();
 
-
-
-            var bufferToBase64 = function (buffer) {
-                var bytes = new Uint8Array(buffer);
-                var len = buffer.byteLength;
-                var binary = "";
-                for (var i = 0; i < len; i++) {
-                    binary += String.fromCharCode(bytes[i]);
-                }
-                return window.btoa(binary);
-            };
-
-
-
-            function strToBuffer (string) {
-                          let arrayBuffer = new ArrayBuffer(string.length * 1);
-                          let newUint = new Uint8Array(arrayBuffer);
-                          newUint.forEach((_, i) => {
-                            newUint[i] = string.charCodeAt(i);
-                          });
-                      return newUint;
-                    }
-
-            function encrytpt(data, key){
-                        for(let i=0;i<data.length; i+=key.length)
-                        {
-                            for(let j=0;j<key.length;j++)
-                            {
-                                data[i+j] ^= key[j];
-                            }
-                        }
-                        return data;
-                        }
+            // var bufferToBase64 = function (buffer) {
+            //     var bytes = new Uint8Array(buffer);
+            //     var len = buffer.byteLength;
+            //     var binary = "";
+            //     for (var i = 0; i < len; i++) {
+            //         binary += String.fromCharCode(bytes[i]);
+            //     }
+            //     return window.btoa(binary);
+            // };
     });
 
-    localStorage.setItem("k_data",'349f02kda02i0asg90j90sa902ais0d02');
-    if(localStorage.getItem("k_data")) {
+    var iv = [ 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36];
+  function Open_file(pathfile, counter){
 
-        $.ajax({
-            url: "ajax/",
-            success: function (data) {
-                var jsondata = JSON.parse(JSON.stringify(data));
-                var counter = 1;
-                for (let i of jsondata) {
-                    var temp = Encrypt_file(i['data'], counter++, jsondata.length);
-                    console.log(counter);
-                }
-            }
-        });
-    }
+            var alldata;
+            let json_xhr = new XMLHttpRequest();
+            json_xhr.open('GET', "media/"+pathfile, true);
+            json_xhr.responseType = 'arraybuffer';
+            json_xhr.onreadystatechange = function(e) {
+                 if (json_xhr.readyState === 4 && json_xhr.status === 200) {
 
-    else {
-        alert("ACCESS DENIED");
-    }
+                     var res_byte = new Uint8Array(this.response, 0);
 
+                     var key = new TextEncoder("utf-8").encode(k_data);
 
-  function Encrypt_file(pathfile, counter, count){
-            let jsonxhr = new XMLHttpRequest();
-            jsonxhr.open('GET', "media/"+pathfile, true);
-            jsonxhr.responseType = 'arraybuffer';
-            jsonxhr.onload = function(e) {
-                var responseArray = new Uint8Array(this.response);
-                var rezArray = new Uint8Array(this.response);
+                     var aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
+                     var decryptedBytes = aesCbc.decrypt(res_byte);
 
-                var key = localStorage.getItem("k_data");
-                console.log(key.length);
-                var uint8array = new TextEncoder("utf-8").encode(key);
+                     while(decryptedBytes[decryptedBytes.length-1]===0)
+                     {
+                        decryptedBytes=decryptedBytes.slice(0,-1);
+                     }
+                     alldata = JSON.parse(aesjs.utils.utf8.fromBytes(decryptedBytes));
 
-                for(var i=0;i<responseArray.length;i++) {
-                    rezArray[i] = responseArray[i] ^ uint8array[i%key.length];
-                }
-                var stringrez = new TextDecoder().decode(rezArray);
-                console.log(stringrez);
-                let alldata = JSON.parse(stringrez);
-                console.log(alldata);
+                let target_call_infos = '<div class="row info">\n' +
+                    '                                <div class="col-xs-2">\n' +
+                    '                                    <a class="music" file = "/media/json_data/audio_file" src="" active="false">\n' +
+                    '                                        <img class="play_button" style="display: block;" src="/static/icon/play_button.png" />\n' +
+                    '                                        <img class="pause_button" style="display: none;" src="/static/icon/pause.png" /> ' +
+                    '                                        <img class="load_button" style="display: none;" src="/static/icon/loader.gif" /> ' +
+                    '                                    </a>\n' +
+                    '                                </div>\n' +
+                    '                                <div class="col-xs-10 for_phone">\n' +
+                    '                                        <img class="phone_In_Out"src="/static/icon/call_icon" />product_to \n' +
+                    '                                </div>\n' +
+                    '                                <div class="col-xs-6 for_calendar">\n' +
+                    '                                    <img class="calendar"src="/static/icon/calendar.png" />start_time\n' +
+                    '                                </div>\n' +
+                    '                                <div class="col-xs-4 for_clock">\n' +
+                    '                                    <img class="clock"src="/static/icon/clock.png" />time</td>\n' +
+                    '                                </div>\n' +
+                    '                     </div>';
 
-                let infos_call = '<div class="div" id="parent_btn" > \n' +
-                    '<a class="buttons" file="/media/json_data/audio_file" active="false"><span class="glyphicon glyphicon-play"></span></a>\n'+
-                    // '                                            <div class="audio">\n' +
-                    // '                                                <audio controls id="music" class="playing" src="./media/json_data/temp.wav" file="/media/json_data/audio_file" controlsList="nodownload"  type="audio/x-wav">\n' +
-                    // '                                            </div>\n' +
-                    '                                            <table class="table table-hover table-bordered">\n' +
-                    '                                                <tr >\n' +
-                    '                                                    <td>С кем</td>\n' +
-                    '                                                    <td>product_to</td>\n' +
-                    '                                                </tr>\n' +
-                    '                                                <tr >\n' +
-                    '                                                    <td>Тип</td>\n' +
-                    '                                                    <td >direction</td>\n' +
-                    '                                                </tr>\n' +
-                    '                                                <tr >\n' +
-                    '                                                    <td>Время начала</td>\n' +
-                    '                                                    <td >start_time</td>\n' +
-                    '                                                </tr>\n' +
-                    '                                                <tr>\n' +
-                    '                                                    <td>Время окончена</td>\n' +
-                    '                                                    <td >stop_time</td>\n' +
-                    '                                                </tr>\n' +
-                    '                                            </table>\n' +
-                    '                                       </div>';
-                let all_infos_call = '';
-                let temp = 0;
-
+                     let all_infos_call = '';
+                     let icon;
                 for (let elem of alldata["Data"]){
-                    all_infos_call+=infos_call.replace("audio_file", elem['audio_file']).replace("product_to", elem["contact"]).replace("direction", elem['direction']).replace("start_time", elem['start_time']).replace("stop_time", elem['stop_time']);
-                    temp++;
+                    if (elem['direction']==="0")
+                        icon = "in.png";
+                    else icon = "out.png";
+                    all_infos_call+=target_call_infos.replace("call_icon", icon).replace("audio_file", elem['audio_file']).replace("product_to", elem["contact"]).replace("start_time", elem['start_time'].substring(0,14)).replace("time", elem['duration']);
                 }
 
 
                 var targetPhone = $('#target_phone');
-
                 targetPhone.append(
-                '                        <div class="col-lg-4">\n' +
-                '                            <div class="portlet">\n' +
-                '                                <div class="portlet-heading backgound-primary">\n' +
-                '                                    <h3 class="portlet-title">\n' +
-                '                                        <i class="glyphicon glyphicon-user"></i>'+alldata["Target"]+' ('+alldata["Phone_number"]+')  </h3>\n' +
-                '                                    <div class="portlet-widgets">\n' +
-                '                                        <a data-toggle="collapse" href=#bg-number'+counter+'><i class="glyphicon glyphicon-chevron-down" ></i></a>\n' +
-                '                                        <span class="divider"></span>\n' +
-                '                                        <a href="#" data-toggle="remove"><i class="glyphicon glyphicon-remove"></i></a>\n' +
-                '                                    </div>\n' +
-                '                                    <div class="clearfix" ></div>\n' +
-                '                                </div>\n' +
-                '                                <div id= bg-number'+counter+' class="panel-collapse collapse show" >\n' +
-                '                                    <div class="portlet-body">'+all_infos_call+'  </div>\n' +
-                '                                </div>\n' +
-                '                            </div>\n' +
-                '                        </div>');
 
-            };
-            jsonxhr.send();
+                    '<div class="col-lg-4 col-xs-12">\n' +
+                    '                <div class="portlet">\n' +
+                    '                    <div class="portlet-heading">\n' +
+                    '                        <h3 class="portlet-title">\n' +
+                    '                           <a data-toggle="collapse"  href="#bg-number1" >\n' +
+                    '                                <i class="glyphicon glyphicon-user"> </i> '+alldata["Target"] +' (' +alldata["Phone_number"]+')'+
+                    '                            </a>\n' +
+                    '                        </h3>\n' +
+                    '                        <div class="portlet-widgets">\n' +
+                    '                            <a data-toggle="collapse"  href="#bg-number1" >\n' +
+                    '                                <i class="glyphicon glyphicon-chevron-down" ></i>\n' +
+                    '                            </a>\n' +
+                    '                            <span class="divider"></span>\n' +
+                    '                            <a href="#" data-toggle="remove">\n' +
+                    '                                <i class="glyphicon glyphicon-remove"></i>\n' +
+                    '                            </a>\n' +
+                    '                        </div>\n' +
+                    '                        <div class="clearfix"></div>\n' +
+                    '                    </div>\n' +
+                    '                    <div id="bg-number1" class="panel-collapse collapse show">\n' +
+                    '                        <div class="portlet-body">'+all_infos_call+
+                    '                        </div>          \n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '            </div>'
+                );
+                  }
+                 };
+
+            json_xhr.send();
     }
 
-    $('audio').on('pause', function () {
-       $('.buttons').children("span").removeClass("glyphicon-pause").addClass("glyphicon-play");
+    player.on('pause', function () {
+        if(temp) {
+            current_music.children('img[class=play_button]').attr('style', 'display:block;');
+            current_music.children('img[class=pause_button]').attr('style', 'display:none;');
+            current_music.children('img[class=load_button]').attr('style', 'display:none;');
+        }
+    });
+
+    player.on('play', function () {
+
+        current_music.children('img[class=play_button]').attr('style', 'display:none;');
+        current_music.children('img[class=pause_button]').attr('style', 'display:block;');
+        current_music.children('img[class=load_button]').attr('style', 'display:none;');
+    });
+
+    player.on('canplay', function () {
+
+        player.trigger("play");
+        current_music.children('img[class=play_button]').attr('style', 'display:none;');
+        current_music.children('img[class=load_button]').attr('style', 'display:none;');
+        current_music.children('img[class=pause_button]').attr('style', 'display:block;');
+
 
     });
+
+  // page yuklanish paytida serverga shifrlangan ma'lumotlarni olish uchun zapros ketadi
+
+        localStorage.setItem("k_data",'349f02kda02i0asg90j90sa902ais0d0');
+
+        //agar kalit mavjud bo'lsa
+        if(localStorage.getItem("k_data")) {
+
+            k_data = localStorage.getItem("k_data");
+            $.ajax({
+                url: "ajax/",
+                success: function (data) {
+                    //server barcha fayllar ro'yhatini json formatda jo'natadi
+                    var jsondata = JSON.parse(JSON.stringify(data));
+
+                    var counter = 1;
+                    //har bir json fayli deshifrlanadi
+                    for (let i of jsondata) {
+                        Open_file(i['data'], counter++);
+
+                    }
+                }
+            });
+            }
+        else {
+            //agar xotirada kalit mavjud bo'lmasa
+            alert("ACCESS DENIED");
+        }
+
 });
 
 

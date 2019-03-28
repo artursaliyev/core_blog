@@ -141,7 +141,7 @@ LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_REDIRECT_URL = '/'
 
-DEBUG = False
+DEBUG = True
 
 
 """Если True, SecurityMiddleware устанавливает заголовок X-Content-Type-Options: nosniff во всех ответах, 
@@ -156,7 +156,7 @@ SECURE_BROWSER_XSS_FILTER = True
 
 """Если True, перенаправляет все не-HTTPS-запросы на HTTPS (за исключением тех URL-адресов, которые соответствуют 
 регулярному выражению, указанному в ).SecurityMiddleware SECURE_REDIRECT_EXEMPT"""
-SECURE_SSL_REDIRECT = True
+# SECURE_SSL_REDIRECT = True
 
 
 """Использовать ли безопасный cookie для cookie сеанса. Если для этого параметра установлено значение True«cookie», 
@@ -164,12 +164,12 @@ SECURE_SSL_REDIRECT = True
 только по HTTPS-соединению.
 Отключение этого параметра не является хорошей идеей, поскольку злоумышленник может перехватить незашифрованный 
 файл cookie сеанса с помощью анализатора пакетов и использовать файл cookie для перехвата сеанса пользователя."""
-SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
 """Использовать ли безопасный файл cookie для файла CSRF. Если для этого параметра установлено значение True«cookie», 
 оно будет помечено как «безопасное», что означает, что браузеры могут гарантировать, 
 что файл cookie отправляется только с подключением HTTPS."""
-CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
 """По умолчанию: 'SAMEORIGIN'
 
@@ -189,4 +189,6 @@ CSRF_COOKIE_SECURE¶
 SESSION_COOKIE_SECURE¶
 Установите это, чтобы True избежать случайной передачи cookie сеанса по HTTP.
 """
+
+# openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/core.key -out /etc/nginx/ssl/core.crt
 

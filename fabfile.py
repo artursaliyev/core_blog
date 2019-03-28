@@ -78,10 +78,14 @@ def set_locale():
 
 
 def install_system_libs():
+    sudo('apt-get update -y')
+    sudo('apt-get upgrade -y')
     sudo('apt-get install -y python3.5-dev')
+    sudo('apt-get install -y python3-pip')
     sudo('apt-get install -y python3-venv')
     sudo('apt-get install -y nginx')
     sudo('apt-get install -y supervisor')
+    sudo('apt-get install -y git')
 
 
 def create_folders():

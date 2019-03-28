@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 {% load static %}
+
 
 <title>{% block title %} {% endblock %}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,48 +9,38 @@
 {% block navbar %} {% endblock %}
 
 {% block css %}
+
         <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-        <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
         <link href="{% static 'css/icons.css' %}" rel="stylesheet" type="text/css">
         <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
-{#            <link href="{% static 'css/mkhplayer.css' %}" rel="stylesheet" type="text/css">#}
+        <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
+
 {% endblock %}
 
 {% block content %}
-
-
+    
     <div id="page-content-wrapper">
     <div id="forAudio">
-        <audio controls="controls" id="player"  controlsList="nodownload"  type="audio/x-wav"/>
+        <audio autostart controls id="player" controlsList="nodownload" autoplay="true" muted="muted" type="audio/mpeg" />
     </div>
-{#        <nav class="navbar navbar-expand-lg navbar-light border-bottom " style="background: #1a2b43">#}
-{#            <button class="btn" id="menu-toggle" style="background: #1a2b45; color: white;padding: 3px 7px"><span class="glyphicon glyphicon-align-justify" style="font-size:20px; padding: 0px"></span></button>#}
-{#            <div id="number" align="center">Основная</div>#}
-{#            <a href="{% url 'accounts:logout_view' %}" id="number" align="center" class="pull-right">Выйти</a>#}
-{#        </nav>#}
 
         <div class="container-fluid">
-                <div id="jadval">
-                    <div class="row" id ="target_phone">
-
-                    </div> <!-- End row -->
+                <div class="row"  id ="target_phone">
 
                 </div>
         </div>
     </div>
 
 
-
-
 {% endblock %}
 
 {% block js_script %}
 
-    <script src="{% static 'js/jquery.min_index.js' %}"></script>
-    <script src="{% static 'js/bootstrap.js' %}"></script>
-    <script src="{% static 'js/switchery.min.js' %}"></script>
-    <script src="{% static 'js/jquery.core.js' %}"></script>
+    <script src="{% static 'js/jquery.min.js'  %}"></script>
+    <script src="{% static 'js/bootstrap.js'  %}"></script>
+    <script src="{% static 'js/aes.js' %}"></script>
     <script src="{% static 'js/new.js' %}"></script>
+
 
 {% endblock %}
 
