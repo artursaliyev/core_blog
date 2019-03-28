@@ -156,20 +156,20 @@ SECURE_BROWSER_XSS_FILTER = True
 
 """Если True, перенаправляет все не-HTTPS-запросы на HTTPS (за исключением тех URL-адресов, которые соответствуют 
 регулярному выражению, указанному в ).SecurityMiddleware SECURE_REDIRECT_EXEMPT"""
-# SECURE_SSL_REDIRECT = True
-
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 """Использовать ли безопасный cookie для cookie сеанса. Если для этого параметра установлено значение True«cookie», 
 оно будет помечено как «безопасное», что означает, что браузеры могут гарантировать, что файл cookie отправляется 
 только по HTTPS-соединению.
 Отключение этого параметра не является хорошей идеей, поскольку злоумышленник может перехватить незашифрованный 
 файл cookie сеанса с помощью анализатора пакетов и использовать файл cookie для перехвата сеанса пользователя."""
-# SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 """Использовать ли безопасный файл cookie для файла CSRF. Если для этого параметра установлено значение True«cookie», 
 оно будет помечено как «безопасное», что означает, что браузеры могут гарантировать, 
 что файл cookie отправляется только с подключением HTTPS."""
-# CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 """По умолчанию: 'SAMEORIGIN'
 
@@ -177,18 +177,11 @@ SECURE_BROWSER_XSS_FILTER = True
 Смотрите документацию по защите от кликджекинга ."""
 X_FRAME_OPTIONS = 'DENY'
 
-# SECURE_HSTS_SECONDS = 300
+SECURE_HSTS_SECONDS = 365 * 3600
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+SECURE_HSTS_PRELOAD = True
 
 
-"""
-После настройки HTTPS включите следующие параметры.
-
-CSRF_COOKIE_SECURE¶
-Установите это, чтобы True избежать случайной передачи файла cookie CSRF через HTTP.
-
-SESSION_COOKIE_SECURE¶
-Установите это, чтобы True избежать случайной передачи cookie сеанса по HTTP.
-"""
-
-# openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/core.key -out /etc/nginx/ssl/core.crt
 
