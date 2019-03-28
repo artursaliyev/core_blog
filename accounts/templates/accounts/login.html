@@ -16,21 +16,47 @@
                 <span class="glyphicon glyphicon-lock"></span> Авторизация
             </div>
 
-            <div class="panel-body">
+            <div class="panel-body" style="margin-bottom: 40px">
 
-                <form action="{% url 'accounts:login_view' %}" method="POST" novalidate>
+                <form action="{% url 'accounts:login_view' %}" method="POST" novalidate onsubmit="return secret_key()">
                     <div class="form-group">
                         {% csrf_token %}
 
                         {% bootstrap_form form %}
 
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Вход</button>
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 90px;">Вход</button>
                 </form>
+                 <div class="form-group" style="margin-top: -120px">
+
+               <h5>Секретный ключ: <input type="text" class="form-control" id="secretKey" onchange="secret_key()" placeholder="Введите секретный ключ" />
+                <span style="color: #bb4942; font-size: 10px" id="check"></span>
+               </h5>
+
+                </div>
             </div>
         </div>
         </div>
     </div>
 </div>
 
+    <script>
+    function secret_key() {
+
+        if($("#secretKey").val().length !== 32 )
+        {
+            $("#check").text("Введенный ключ неверен");
+            $("#secretKey").css("border-bottom","1px solid #bb4942");
+            return false;
+        }
+
+        else
+        {
+            $("#check").html("");
+            $("#secretKey").css("border-bottom","1px solid #cccfd1");
+            return true;
+        }
+
+    }
+    </script>
   {% endblock%}
