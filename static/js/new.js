@@ -5,12 +5,12 @@ $(document).ready(function () {
     var player =  $("#player");//audio tegi player
     var k_data;
     var current_music;
-    var temp;
+
+    let xhr = new XMLHttpRequest();
     $(document).on("touchstart",".music", function () {
 
         current_music = $(this); //tanlangan musiqa (href a)
 
-        temp = true;
         if(current_music.attr("active")==="true") {
 
             if(current_music.children('img[class=play_button]').attr('style')==='display:none;') {
@@ -28,7 +28,9 @@ $(document).ready(function () {
             return;
         }
 
-
+        xhr.abort();
+        player.get(0).pause();
+        player.currentTime = 0;
         player.removeAttr("src");
         player.trigger('load');
 
@@ -49,9 +51,7 @@ $(document).ready(function () {
         //     return;
         // }
 
-        temp=false;
-        player.get(0).pause();
-        player.currentTime = 0;
+
 
         current_music.children('img[class=load_button]').attr('style', 'display:block;');
         current_music.children('img[class=play_button]').attr('style', 'display:none;');
@@ -65,7 +65,6 @@ $(document).ready(function () {
 
         current_music.attr("active","true");
 
-        let xhr = new XMLHttpRequest();
         xhr.open('GET', current_music.attr("file"), true);
         xhr.responseType = 'arraybuffer';
 
@@ -83,6 +82,9 @@ $(document).ready(function () {
                 }
                 else {
                     alert("Error load audio file!!!");
+                    current_music.children('img[class=play_button]').attr('style', 'display:block;');
+                    current_music.children('img[class=pause_button]').attr('style', 'display:none;');
+                    current_music.children('img[class=load_button]').attr('style', 'display:none;');
                 } }
             };
             xhr.send();
@@ -186,7 +188,7 @@ $(document).ready(function () {
     }
 
     player.on('pause', function () {
-        if(temp) {
+        if(current_music.children('img[class=load_button]').attr("style")!=='display:block;') {
             current_music.children('img[class=play_button]').attr('style', 'display:block;');
             current_music.children('img[class=pause_button]').attr('style', 'display:none;');
             current_music.children('img[class=load_button]').attr('style', 'display:none;');
@@ -194,10 +196,11 @@ $(document).ready(function () {
     });
 
     player.on('play', function () {
-
-        current_music.children('img[class=play_button]').attr('style', 'display:none;');
-        current_music.children('img[class=pause_button]').attr('style', 'display:block;');
-        current_music.children('img[class=load_button]').attr('style', 'display:none;');
+        if(current_music.children('img[class=load_button]').attr("style")!=='display:block;') {
+            current_music.children('img[class=play_button]').attr('style', 'display:none;');
+            current_music.children('img[class=pause_button]').attr('style', 'display:block;');
+            current_music.children('img[class=load_button]').attr('style', 'display:none;');
+        }
     });
 
     player.on('canplay', function () {
@@ -206,7 +209,6 @@ $(document).ready(function () {
         current_music.children('img[class=play_button]').attr('style', 'display:none;');
         current_music.children('img[class=load_button]').attr('style', 'display:none;');
         current_music.children('img[class=pause_button]').attr('style', 'display:block;');
-
 
     });
 
