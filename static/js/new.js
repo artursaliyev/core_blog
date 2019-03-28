@@ -190,7 +190,7 @@ $(document).ready(function () {
 
   // page yuklanish paytida serverga shifrlangan ma'lumotlarni olish uchun zapros ketadi
 
-        localStorage.setItem("k_data",'349f02kda02i0asg90j90sa902ais0d0');
+        //localStorage.setItem("k_data",'349f02kda02i0asg90j90sa902ais0d0');
 
         //agar kalit mavjud bo'lsa
         if(localStorage.getItem("k_data")) {
