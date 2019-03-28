@@ -5,10 +5,14 @@ $(document).ready(function () {
     var player =  $("#player");//audio tegi player
     var k_data;
     var current_music;
+    var xhr = new XMLHttpRequest();
 
-    let xhr = new XMLHttpRequest();
     $(document).on("touchstart",".music", function () {
 
+
+        if($(".music[active=true]").children('img[class=load_button]').attr("style")==="display:block;") {
+            return;
+        }
         current_music = $(this); //tanlangan musiqa (href a)
 
         if(current_music.attr("active")==="true") {
@@ -33,25 +37,6 @@ $(document).ready(function () {
         player.currentTime = 0;
         player.removeAttr("src");
         player.trigger('load');
-
-        // if(current_music.attr("src")!=="")
-        // {
-        //     player.get(0).pause();
-        //     player.currentTime = 0;
-        //      $('.music[active=true]').children('img[class=load_button]').attr('style', 'display:none;');
-        //      $('.music[active=true]').children('img[class=pause_button]').attr('style', 'display:none;');
-        //      $('.music[active=true]').children('img[class=play_button]').attr('style', 'display:block;');
-        //      $('.music[active=true]').attr("active", "false");
-        //      current_music.attr("active","true");
-        //      current_music.children('img[class=load_button]').attr('style', 'display:block;');
-        //     current_music.children('img[class=play_button]').attr('style', 'display:none;');
-        //     current_music.children('img[class=pause_button]').attr('style', 'display:none;');
-        //     player.attr("src", current_music.attr("src"));
-        //     player.trigger("load");
-        //     return;
-        // }
-
-
 
         current_music.children('img[class=load_button]').attr('style', 'display:block;');
         current_music.children('img[class=play_button]').attr('style', 'display:none;');
@@ -89,15 +74,6 @@ $(document).ready(function () {
             };
             xhr.send();
 
-            // var bufferToBase64 = function (buffer) {
-            //     var bytes = new Uint8Array(buffer);
-            //     var len = buffer.byteLength;
-            //     var binary = "";
-            //     for (var i = 0; i < len; i++) {
-            //         binary += String.fromCharCode(bytes[i]);
-            //     }
-            //     return window.btoa(binary);
-            // };
     });
 
     var iv = [ 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36];
