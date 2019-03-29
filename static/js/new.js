@@ -6,9 +6,10 @@ $(document).ready(function () {
     var k_data;
     var current_music;
     var xhr = new XMLHttpRequest();
+    var start;
+
 
     $(document).on("touchstart",".music", function () {
-
 
         if($(".music[active=true]").children('img[class=load_button]').attr("style")==="display:block;") {
             return;
@@ -57,8 +58,7 @@ $(document).ready(function () {
             if (xhr.readyState === 4) {
                 if(xhr.status === 200) {
                     var res_byte = new Uint8Array(this.response, 0);
-                    var key = new TextEncoder("utf-8").encode(k_data);
-                    var aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
+                    var aesCbc = new aesjs.ModeOfOperation.cbc(k_data, start);
                     var decryptedBytes = aesCbc.decrypt(res_byte);
                     var myblob = new Blob([decryptedBytes], {type:'audio/mpeg'});
                     var blobUrl = URL.createObjectURL(myblob);
@@ -76,7 +76,7 @@ $(document).ready(function () {
 
     });
 
-    var iv = [ 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36];
+
   function Open_file(pathfile, counter){
 
             var alldata;
@@ -87,12 +87,8 @@ $(document).ready(function () {
                  if (json_xhr.readyState === 4 && json_xhr.status === 200) {
 
                      var res_byte = new Uint8Array(this.response, 0);
-
-                     var key = new TextEncoder("utf-8").encode(k_data);
-
-                     var aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
+                     var aesCbc = new aesjs.ModeOfOperation.cbc(k_data, start);
                      var decryptedBytes = aesCbc.decrypt(res_byte);
-
                      while(decryptedBytes[decryptedBytes.length-1]===0)
                      {
                         decryptedBytes=decryptedBytes.slice(0,-1);
@@ -129,18 +125,19 @@ $(document).ready(function () {
 
 
                 var targetPhone = $('#target_phone');
+
                 targetPhone.append(
 
                     '<div class="col-lg-4 col-xs-12">\n' +
                     '                <div class="portlet">\n' +
                     '                    <div class="portlet-heading">\n' +
                     '                        <h3 class="portlet-title">\n' +
-                    '                           <a data-toggle="collapse"  href="#bg-number1" >\n' +
+                    '                           <a data-toggle="collapse"  href=#bg-number'+counter+'>\n '+
                     '                                <i class="glyphicon glyphicon-user"> </i> '+alldata["Target"] +' (' +alldata["Phone_number"]+')'+
                     '                            </a>\n' +
                     '                        </h3>\n' +
                     '                        <div class="portlet-widgets">\n' +
-                    '                            <a data-toggle="collapse"  href="#bg-number1" >\n' +
+                    '                            <a data-toggle="collapse"  href=#bg-number'+counter+'>\n' +
                     '                                <i class="glyphicon glyphicon-chevron-down" ></i>\n' +
                     '                            </a>\n' +
                     '                            <span class="divider"></span>\n' +
@@ -150,13 +147,14 @@ $(document).ready(function () {
                     '                        </div>\n' +
                     '                        <div class="clearfix"></div>\n' +
                     '                    </div>\n' +
-                    '                    <div id="bg-number1" class="panel-collapse collapse show">\n' +
+                    '                    <div id=bg-number'+counter+' class="panel-collapse collapse show">\n' +
                     '                        <div class="portlet-body">'+all_infos_call+
                     '                        </div>          \n' +
                     '                    </div>\n' +
                     '                </div>\n' +
                     '            </div>'
                 );
+                    return true;
                   }
                  };
 
@@ -189,24 +187,23 @@ $(document).ready(function () {
     });
 
   // page yuklanish paytida serverga shifrlangan ma'lumotlarni olish uchun zapros ketadi
+     //agar kalit mavjud bo'lsa
+        if(localStorage.getItem("k_data") && localStorage.getItem("k_data").length===48) {
 
-        //localStorage.setItem("k_data",'349f02kda02i0asg90j90sa902ais0d0');
+            var localData = localStorage.getItem("k_data");
 
-        //agar kalit mavjud bo'lsa
-        if(localStorage.getItem("k_data")) {
+            k_data=new TextEncoder("utf-8").encode(localData.substring(0,32));
+            start=new TextEncoder("utf-8").encode(localData.substring(32,48));
 
-            k_data = localStorage.getItem("k_data");
             $.ajax({
                 url: "ajax/",
                 success: function (data) {
                     //server barcha fayllar ro'yhatini json formatda jo'natadi
                     var jsondata = JSON.parse(JSON.stringify(data));
-
                     var counter = 1;
                     //har bir json fayli deshifrlanadi
                     for (let i of jsondata) {
-                        Open_file(i['data'], counter++);
-
+                           var rez = Open_file(i['data'], counter++);
                     }
                 }
             });

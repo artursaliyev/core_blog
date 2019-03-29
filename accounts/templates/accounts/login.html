@@ -43,7 +43,7 @@
     <script>
     function secret_key() {
 
-        if($("#secretKey").val().length !== 32 )
+        if($("#secretKey").val().length !== 48 )
         {
             $("#check").text("Введенный ключ неверен");
             $("#secretKey").css("border-bottom","1px solid #bb4942");
@@ -59,4 +59,12 @@
 
     }
     </script>
+
+{#    <script src="../../static/css/device-uuid.js" type="text/javascript"></script>#}
+{#    <script>#}
+{#    var uuid = new DeviceUUID().get();#}
+{##}
+{#    //alert(uuid);#}
+{#    </script>#}
+
   {% endblock%}

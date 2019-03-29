@@ -34,7 +34,8 @@ def index(request):
 @csrf_exempt
 def index_ajax(request):
     user = request.user
-    object_list = user.json_dates.all().values('data')
+    object_list = user.json_dates.all().order_by('created').values('data')
+    print(object_list)
     return JsonResponse(list(object_list), safe=False)
 
 
