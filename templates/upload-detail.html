@@ -12,19 +12,22 @@
 
 <form method="post" action="{% url 'blog:upload-detail' obj.pk %}">
     {% csrf_token %}
-
+<div class="jumbotron">
+   <div class=" col-xs-offset-3 col-xs-6" role="alert" style="background: #a6e1ec; padding: 20px;border-radius: 10px">
+       <h4 align="center">Выберите пользователи которых вы хотите открыть доступ : </h4>
         <div class="container" style="font-size: large;">
           <div class="row" >
               <div class="col-xs-offset-5">
               {{ form.perm_users }}
 
 
-            <button type="submit" class="submit-btn btn btn-outline-success">Сохранить</button>
-    <a href="{% url 'blog:upload' %}" type="button" class="submit-btn btn btn-outline-warning">Отменить</a>
+            <button type="submit" class="submit-btn btn btn-success">Сохранить</button>
+    <a href="{% url 'blog:upload' %}" type="button" class="submit-btn btn btn-outline-primary">Отменить</a>
             </div>
               </div>
         </div>
-
+</div>
+    </div>
     </form>
 
 {% endblock %}
