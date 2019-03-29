@@ -222,3 +222,7 @@ color: white;
   width: 41px;
 
 }
+
+.table  tr td{
+  font-size: 15px;
+}

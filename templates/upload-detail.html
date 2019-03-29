@@ -13,14 +13,18 @@
 <form method="post" action="{% url 'blog:upload-detail' obj.pk %}">
     {% csrf_token %}
 
-        <div class="container" style="font-size: large">
-          <div class="row">
+        <div class="container" style="font-size: large;">
+          <div class="row" >
+              <div class="col-xs-offset-5">
               {{ form.perm_users }}
-          </div>
+
+
+            <button type="submit" class="submit-btn btn btn-outline-success">Сохранить</button>
+    <a href="{% url 'blog:upload' %}" type="button" class="submit-btn btn btn-outline-warning">Отменить</a>
+            </div>
+              </div>
         </div>
 
-    <button type="submit" class="submit-btn btn btn-outline-success">Сохранить</button>
-    <a href="{% url 'blog:upload' %}" type="button" class="submit-btn btn btn-outline-warning">Отменить</a>
-</form>
+    </form>
 
 {% endblock %}

@@ -11,9 +11,10 @@
 
     {% block css %}
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-    <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
     <link href="{% static 'css/icons.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
+
     {% endblock %}
     {% block extend_css %}
     {% endblock %}
@@ -21,15 +22,13 @@
 </head>
 
 <body>
-
+  <ol class="breadcrumb" style="font-size: large">
     {% block navbar %}
-     <ol class="breadcrumb" style="font-size: large">
       <li>Основная</li>
       <li><a href="{% url 'blog:user_list' %}">Пользователи</a></li>
       <li><a href="{% url 'accounts:logout_view' %}">Выйти из системы</a></li>
-    </ol>
     {% endblock %}
-
+</ol>
     <div id="wrapper">
 
         {% block side_bar %}
