@@ -141,7 +141,7 @@ LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_REDIRECT_URL = '/'
 
-DEBUG = True
+DEBUG =True
 
 
 """Если True, SecurityMiddleware устанавливает заголовок X-Content-Type-Options: nosniff во всех ответах, 
