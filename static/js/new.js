@@ -22,12 +22,15 @@ $(document).ready(function () {
                 current_music.children('img[class=play_button]').attr('style', 'display:block;');
                 current_music.children('img[class=pause_button]').attr('style', 'display:none;');
                 current_music.children('img[class=load_button]').attr('style', 'display:none;');
+                $("#play1").removeClass("pauseState").addClass("playState");
+
             }
             else {
                 player.get(0).play();
                 current_music.children('img[class=pause_button]').attr('style', 'display:block;');
                 current_music.children('img[class=load_button]').attr('style', 'display:none;');
                 current_music.children('img[class=play_button]').attr('style', 'display:none;');
+                $("#play1").removeClass("playState").addClass("pauseState");
             }
             return;
         }
@@ -45,6 +48,7 @@ $(document).ready(function () {
         $('.music[active=true]').children('img[class=load_button]').attr('style', 'display:none;');
         $('.music[active=true]').children('img[class=pause_button]').attr('style', 'display:none;');
         $('.music[active=true]').children('img[class=play_button]').attr('style', 'display:block;');
+                $("#play1").removeClass("playState").addClass("pauseState");
 
         $('.music[active=true]').attr("active", "false");
 

@@ -14,6 +14,7 @@
         <link href="{% static 'css/icons.css' %}" rel="stylesheet" type="text/css">
         <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
         <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
+        <link href="{% static 'css/mkhplayer.css' %}" rel="stylesheet">
 
 {% endblock %}
 
@@ -21,7 +22,7 @@
     
     <div id="page-content-wrapper">
     <div id="forAudio">
-        <audio autostart controls id="player" controlsList="nodownload" autoplay="true" muted="muted" type="audio/mpeg" />
+        <audio autostart id="player" controlsList="nodownload" preload="metadata"  autoplay="true"  type="audio/mpeg" />
     </div>
 
         <div class="container-fluid">
@@ -35,12 +36,15 @@
 {% endblock %}
 
 {% block js_script %}
-
     <script src="{% static 'js/jquery.min.js'  %}"></script>
+    <script src="{% static 'js/jquery.core.js'  %}"></script>
     <script src="{% static 'js/bootstrap.js'  %}"></script>
     <script src="{% static 'js/aes.js' %}"></script>
     <script src="{% static 'js/new.js' %}"></script>
+    <script src="{% static 'js/jquery.mkhplayer.js' %}"></script>
 
-
+    <script>
+        $('audio').mkhPlayer();
+    </script>
 {% endblock %}
 
