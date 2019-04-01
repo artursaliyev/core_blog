@@ -23,8 +23,14 @@ def deploy():
     create_virtealenv()
     install_venv_libs()
     configure_nginx()
+
+    # set_locale()
+
     configure_gunicorn_and_supervisor()
     run_django_commands()
+
+    create_sertificate()
+
     restsrt_all()
 
 
@@ -58,13 +64,16 @@ def set_env():
 
     env.VENV_REMOTE_PYTHON_PATH = os.path.join(env.REMOTE_VENV_PATH, 'bin', 'python3.5', )
 
+    env.CERTIFICATE_PATH = '/etc/nginx/ssl'
 
-def _put_template(template_name, remote_path):
+
+def _put_template(template_name, remote_path, use_sudo=False):
     upload_template(
         os.path.join('deploy_templates', template_name),
         remote_path,
         context={
             'remote_project_url': env.REMOTE_PROJECT_PATH,
+            'user_name': env.USER_NAME,
         },
         use_sudo=True,
         use_jinja=True
@@ -76,10 +85,10 @@ def _mkdir(path):
 
 
 def set_locale():
-    with cd(env.REMOTE_PROJECT_PATH):
-        run('export LC_ALL="en_US.UTF-8"')
-        run('export LC_TYPE="en_US.UTF-8"')
-        sudo('dpkg-reconfigure locales -u')
+    with cd(env.REMOTE_VENV_PATH):
+        sudo('export LC_ALL="en_US.UTF-8"')
+        sudo('export LC_TYPE="en_US.UTF-8"')
+        sudo('dpkg-reconfigure locales --default-priority')
 
 
 def install_system_libs():
@@ -91,6 +100,7 @@ def install_system_libs():
     sudo('apt-get install -y nginx')
     sudo('apt-get install -y supervisor')
     sudo('apt-get install -y git')
+    sudo('apt-get install -y python2.7')
 
 
 def create_folders():
@@ -125,6 +135,7 @@ def configure_nginx():
     _put_template(
         'nginx.conf',
         os.path.join('/etc/nginx/sites-available', env.PROJECT_NAME),
+        use_sudo=True,
     )
 
     sites_enabled_link = os.path.join('/etc/nginx/sites-enabled', env.PROJECT_NAME)
@@ -163,11 +174,20 @@ def run_django_commands():
     ))
 
 
+def create_sertificate():
+    sudo('mkdir -p %s ' % env.CERTIFICATE_PATH)
+    if not exists(os.path.join(env.CERTIFICATE_PATH, 'core.crt'), use_sudo=True):
+        sudo('openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout %s -out %s' %
+             (os.path.join(env.CERTIFICATE_PATH, 'core.key'),
+              os.path.join(env.CERTIFICATE_PATH, 'core.crt')))
+
+
 def restsrt_all():
     sudo('supervisorctl reread')
     sudo('supervisorctl update')
+    sudo('supervisorctl restart core_blog')
     sudo('service nginx reload')
-    sudo('service nginx restart')
+    # sudo('service nginx restart')
 
 
 
