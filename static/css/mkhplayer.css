@@ -58,18 +58,20 @@
 	position: relative;
 	float: left;
 	margin-left: 10px;
-	min-height: 5px;
-	top:14px;
+	min-height: 8px;
+	top:13px;
 	background:rgba(255,255,255,.4);
 	z-index: 10;
 	cursor: pointer;
+	border-radius: 5px;
 }
 
 .progressBar{
 	position: absolute;
-	min-height: 5px;
+	min-height: 8px;
 	width:0%;
 	background:rgba(255,255,255,.8);
 	cursor: pointer;
 	z-index: 11;
+	border-radius: 5px;
 }

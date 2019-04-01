@@ -14,14 +14,14 @@
 			var audioWrapper = $("<div class='audioWrapper'></div>"); // audio player wrapper div element
 			var functionControl = $("<a href='#' class='functionControl playState play1' id='play1'>Play</a>"); // play pause button
 			
-			var currentTime = $("<div class='currentTime'></div>"); // current time
+			var currentTime = $("<div class='currentTime'>00:00:00</div>"); // current time
 			var currentTimeId = 'currentTime-' + id; // make current time id "currentTime-{id}"
 			$(currentTime).attr('id',currentTimeId); // set it to id
 
 			var progressWrapper = $("<div class='progressWrapper'></div>");
 			var progressBar = $("<div class='progressBar'></div>");
 			
-			var durationTime = $("<div class='durationTime'></div>"); // duration time
+			var durationTime = $("<div class='durationTime'>00:00:00</div>"); // duration time
 			var durationTimeId = 'durationTime-' + id; // make duration time id "durationTime-{id}"
 			$(durationTime).attr('id',durationTimeId); // set it to id
 
@@ -156,8 +156,10 @@
 					$(progressWrapper).width(progressWrapperWidth-reservedControlsWidth);
 				}else{
 					$(progressWrapper).width(audioWrapperWidth-reservedControlsWidth);
-					
+
 				}
+
+				// $(progressWrapper).width(150);
 			}
 
 			if(music.readyState>=2 || music.readyState>=1){
